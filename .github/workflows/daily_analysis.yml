@@ -2,10 +2,10 @@ name: 每日股票分析
 
 on:
   schedule:
-    # 中国时间 08:30
-    - cron: '30 0 * * 1-5'
-    # 中国时间 12:30
-    - cron: '30 4 * * 1-5'
+    # 中国时间 周一到周五 08:00
+    - cron: '0 0 * * 1-5'
+    # 中国时间 周一到周五 12:00
+    - cron: '0 4 * * 1-5'
   workflow_dispatch:
     inputs:
       mode:
@@ -33,9 +33,6 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: 随机延迟（避免固定时间访问）
-        run: sleep $((RANDOM % 60))
-
       - name: 检出代码
         uses: actions/checkout@v5
 
@@ -164,7 +161,6 @@ jobs:
             python main.py --no-market-review $FORCE_RUN_ARG
           else
             python main.py $FORCE_RUN_ARG
-          fi
 
       - name: 上传分析报告
         uses: actions/upload-artifact@v6
